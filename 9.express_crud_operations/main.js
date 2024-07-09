@@ -5,10 +5,12 @@ app.use(express.json());
 
 const db = [];
 
+// GET USER
 app.get("/", (req, res) => {
   res.status(201).send(db);
 });
 
+// POST USER
 app.post("/users", (req, res) => {
   const { uname, upassword } = req.body;
   if (!uname || !upassword) {
@@ -21,6 +23,22 @@ app.post("/users", (req, res) => {
     };
     db.push(data);
     res.status(201).send("user created successfully");
+  }
+});
+
+// UPDATE USER
+app.put("/users", (req, res) => {
+  const { uid, uname, upassword } = req.body;
+  if (!uid || !uname || !upassword) {
+    res.status(401).send("user not updated");
+  } else {
+    const findIndex = () => {
+      return db.findIndex((value) => value.user_id === uid);
+    };
+    const getIndex = findIndex();
+    db[getIndex].user_name = uname;
+    db[getIndex].user_password = upassword;
+    res.status(201).send("user updated successfully");
   }
 });
 
