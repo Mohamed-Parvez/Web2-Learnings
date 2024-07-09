@@ -3,7 +3,12 @@ const app = express();
 const port = 3000;
 app.use(express.json());
 
-const db = [];
+const db = [
+  { user_id: 1, user_name: "faka", user_password: "parvez.me" },
+  { user_id: 2, user_name: "raka", user_password: "parvez.me" },
+  { user_id: 3, user_name: "jo", user_password: "parvez.me" },
+  { user_id: 4, user_name: "ko", user_password: "parvez.me" },
+];
 
 // GET USER
 app.get("/", (req, res) => {
@@ -39,6 +44,21 @@ app.put("/users", (req, res) => {
     db[getIndex].user_name = uname;
     db[getIndex].user_password = upassword;
     res.status(201).send("user updated successfully");
+  }
+});
+
+// DELETE DATA
+app.delete("/users", (req, res) => {
+  const { uid, uname, upassword } = req.body;
+  const findId = () => {
+    return db.findIndex((value) => value.user_id === uid);
+  };
+  const getId = findId();
+  if (!uid || !uname || !upassword) {
+    res.status(402).send("delete user failed");
+  } else {
+    db.splice(getId, 1);
+    res.status(201).send("user deleted successfully");
   }
 });
 
