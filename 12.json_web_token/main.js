@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import User from "./usermodel.js";
+import Authenticate from "./middleware.js";
 
 const app = express();
 
@@ -47,21 +48,15 @@ app.post("/signup", async (req, res) => {
 });
 
 // protected route
-app.get("/accessResource", (req, res) => {
-  const token = req.headers.authorization.split(" ")[1];
-  if (!token) {
-    res.status(200).json({
-      success: false,
-      message: "Error!Token was not provided.",
-    });
-  }
-  const decodedToken = jwt.verify(token, "secretkeyappearshere");
-  res.status(200).json({
-    success: true,
-    data: {
-      userId: decodedToken.userId,
-      email: decodedToken.email,
-    },
+app.get("/accessResource", Authenticate, (req, res) => {
+  res.json("you are here at protected route");
+});
+
+// protected route
+app.get("/parvezdata", Authenticate, (req, res) => {
+  res.json({
+    name: "parvez",
+    isLegend: true,
   });
 });
 
