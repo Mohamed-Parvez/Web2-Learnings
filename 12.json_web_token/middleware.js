@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const Authenticate = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   if (!token) {
-    res.status(200).json({
+    res.status(401).json({
       success: false,
       message: "Error!Token was not provided.",
     });
