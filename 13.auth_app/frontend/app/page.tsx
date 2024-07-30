@@ -28,15 +28,22 @@ function Home() {
       <nav className="flex items-center justify-between py-4 px-10">
         <div></div>
         {isSession ? (
-          <button
-            className="px-4 py-2 ring-1 ring-black rounded-full bg-black text-white hover:bg-white hover:text-black"
-            onClick={() => {
-              localStorage.removeItem("token");
-              window.location.reload();
-            }}
-          >
-            Log Out
-          </button>
+          <div className="flex items-center justify-center gap-4">
+            <Link href={"/createPost"}>
+              <button className="px-4 py-2 ring-1 ring-black rounded-full bg-white text-black hover:bg-black hover:text-white">
+                Create Post
+              </button>
+            </Link>
+            <button
+              className="px-4 py-2 ring-1 ring-black rounded-full bg-black text-white hover:bg-white hover:text-black"
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.reload();
+              }}
+            >
+              Log Out
+            </button>
+          </div>
         ) : (
           <div className="flex items-center justify-center gap-7">
             <Link href="/auth/signup">
@@ -55,7 +62,7 @@ function Home() {
       {isSession ? (
         <div>
           {posts.map((e) => (
-            <div className="flex flex-col items-start justify-start space-y-3">
+            <div className="flex flex-col px-10 ring-1 ring-slate-600 w-[300px] mx-10 my-6 p-4 items-start justify-start space-y-3">
               <p>{e._id}</p>
               <p>{e.postName}</p>
               <p>{e.postDescription}</p>

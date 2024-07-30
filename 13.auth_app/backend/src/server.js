@@ -22,7 +22,7 @@ app.get("/posts", AuthMiddleware, async (req, res) => {
   return res.status(201).json({ getPosts });
 });
 
-app.post("/createPost", AuthMiddleware, async (req, res) => {
+app.post("/api/createPost", AuthMiddleware, async (req, res) => {
   const { postName, postDescription } = req.body;
   if (!postName || !postDescription) {
     res.status(401).json({
