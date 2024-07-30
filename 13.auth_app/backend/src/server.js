@@ -19,7 +19,7 @@ config();
 
 app.get("/posts", AuthMiddleware, async (req, res) => {
   const getPosts = await Posts.find();
-  res.json(getPosts);
+  return res.status(201).json({ getPosts });
 });
 
 app.post("/createPost", AuthMiddleware, async (req, res) => {
