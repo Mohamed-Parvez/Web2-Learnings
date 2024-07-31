@@ -49,18 +49,16 @@ app.post("/api/createPost", AuthMiddleware, async (req, res) => {
   }
 });
 
-app.delete("/deletePost", AuthMiddleware, async (req, res) => {
-  const { postName } = req.body;
-  if (!postName) {
+app.delete("/api/deletePost", AuthMiddleware, async (req, res) => {
+  const { _id } = req.body;
+  if (!_id) {
     res.json({
       status: "failed",
       message: "enter post name",
     });
   } else {
     try {
-      const findPost = await Posts.findOne({ postName });
-      const id = findPost._id;
-      await Posts.findByIdAndDelete(id).then(() => {
+      await Posts.findByIdAndDelete(_id).then(() => {
         res.json({
           status: "success",
           message: "post deleted successfully",
@@ -71,6 +69,34 @@ app.delete("/deletePost", AuthMiddleware, async (req, res) => {
         status: "failed",
         message: "delete post failed",
         reason: "check your internet connection",
+      });
+    }
+  }
+});
+
+app.put("/api/updatePost", AuthMiddleware, async (req, res) => {
+  const { _id, postName, postDescription } = req.body;
+  if (!_id || !postName || !postDescription) {
+    res.json({
+      status: "failed",
+      message: "enter post details",
+    });
+  } else {
+    try {
+      await Posts.findByIdAndUpdate(_id, {
+        postName: postName,
+        postDescription: postDescription,
+      }).then(() => {
+        res.json({
+          status: "success",
+          message: "post updated successfully",
+        });
+      });
+    } catch {
+      res.json({
+        status: "failed",
+        message: "something went wrong",
+        reason: "check your network connection",
       });
     }
   }
