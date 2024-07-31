@@ -36,7 +36,7 @@ const page = () => {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": localStorage.getItem("token") as string,
+                Authorization: localStorage.getItem("token") as string,
               },
               body: JSON.stringify({
                 postName: postName,

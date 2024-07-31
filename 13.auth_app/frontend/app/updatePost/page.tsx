@@ -37,7 +37,7 @@ const page = () => {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": localStorage.getItem("token") as string,
+                Authorization: localStorage.getItem("token") as string,
               },
               body: JSON.stringify({
                 _id: searchParams.get("_id"),

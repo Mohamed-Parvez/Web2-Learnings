@@ -17,7 +17,7 @@ function Home() {
     axios
       .get("http://localhost:8080/posts", {
         headers: {
-          "Authorization": localStorage.getItem("token"),
+          Authorization: localStorage.getItem("token"),
           "Content-Type": "application/json",
         },
       })
@@ -70,35 +70,11 @@ function Home() {
       {isSession ? (
         <div>
           {posts.map((e) => (
-            <div className="flex justify-center space-x-10 mt-6 w-[440px] mx-10 ring-1 ring-slate-300">
+            <div className="flex justify-center space-x-10 mt-6 w-[340px] mx-10 ring-1 ring-slate-400">
               <div className="flex flex-col py-6 items-start justify-start space-y-3">
                 <p>{e._id}</p>
                 <p>{e.postName}</p>
                 <p>{e.postDescription}</p>
-              </div>
-              <div className="flex items-center flex-col space-y-4 justify-center">
-                <button
-                  className="px-4 py-2 ring-1 w-[140px] ring-black rounded-full bg-black text-white hover:bg-white hover:text-black"
-                  onClick={async () => {
-                    await fetch("http://localhost:8080/api/deletePost", {
-                      method: "DELETE",
-                      headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": localStorage.getItem("token") as string,
-                      },
-                      body: JSON.stringify({
-                        _id: e._id,
-                      }),
-                    }).then(() => window.location.reload());
-                  }}
-                >
-                  Delete Post
-                </button>
-                <Link href={{ query: { _id: e._id }, pathname: "/updatePost" }}>
-                  <button className="px-4 py-2 ring-1 w-[140px] ring-black rounded-full bg-black text-white hover:bg-white hover:text-black">
-                    Update Post
-                  </button>
-                </Link>
               </div>
             </div>
           ))}
