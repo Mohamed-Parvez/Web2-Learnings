@@ -17,7 +17,7 @@ function Home() {
     axios
       .get("http://localhost:8080/posts", {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          "Authorization": localStorage.getItem("token"),
           "Content-Type": "application/json",
         },
       })
@@ -31,6 +31,11 @@ function Home() {
         </div>
         {isSession ? (
           <div className="flex items-center justify-center gap-4">
+            <Link href={"/yourPosts"}>
+              <button className="px-4 py-2 ring-1 ring-black rounded-full bg-white text-black hover:bg-black hover:text-white">
+                Your Posts
+              </button>
+            </Link>
             <Link href={"/createPost"}>
               <button className="px-4 py-2 ring-1 ring-black rounded-full bg-white text-black hover:bg-black hover:text-white">
                 Create Post

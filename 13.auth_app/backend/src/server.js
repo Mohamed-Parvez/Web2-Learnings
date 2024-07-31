@@ -24,6 +24,7 @@ app.get("/posts", AuthMiddleware, async (req, res) => {
 
 app.post("/api/createPost", AuthMiddleware, async (req, res) => {
   const { postName, postDescription } = req.body;
+  const owner_id = req._id;
   if (!postName || !postDescription) {
     res.status(401).json({
       status: "failed",
@@ -34,6 +35,7 @@ app.post("/api/createPost", AuthMiddleware, async (req, res) => {
       await Posts.create({
         postName: postName,
         postDescription: postDescription,
+        owner_id: owner_id,
       });
       res.status(201).json({
         status: "success",
@@ -143,6 +145,12 @@ app.post("/api/auth/signin", async (req, res) => {
       res.json(e);
     }
   }
+});
+
+app.get("/api/userPosts", AuthMiddleware, async (req, res) => {
+  const owner_id = req._id;
+  const getUserPosts = await Posts.find({ owner_id });
+  res.json({ getUserPosts });
 });
 
 app.listen(process.env.PORT, () => {
