@@ -10,8 +10,10 @@ import Link from "next/link";
 export const isSession = localStorage.getItem("token");
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 function Home() {
+  const { status, data } = useSession();
   const [posts, setPosts] = useState<PostProps[]>([]);
   useEffect(() => {
     axios
@@ -29,7 +31,7 @@ function Home() {
         <div>
           <p className="text-[26px] font-medium">WAVER</p>
         </div>
-        {isSession ? (
+        {isSession || status === "authenticated" ? (
           <div className="flex items-center justify-center gap-4">
             <Link href={"/yourPosts"}>
               <button className="px-4 py-2 ring-1 ring-black rounded-full bg-white text-black hover:bg-black hover:text-white">
@@ -41,15 +43,25 @@ function Home() {
                 Create Post
               </button>
             </Link>
-            <button
-              className="px-4 py-2 ring-1 ring-black rounded-full bg-black text-white hover:bg-white hover:text-black"
-              onClick={() => {
-                localStorage.removeItem("token");
-                window.location.reload();
-              }}
-            >
-              Log Out
-            </button>
+            {isSession ? (
+              <button
+                className="px-4 py-2 ring-1 ring-black rounded-full bg-black text-white hover:bg-white hover:text-black"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  window.location.reload();
+                }}
+              >
+                Log Out
+              </button>
+            ) : (
+              <Link
+                className="px-4 py-2 ring-1 ring-black rounded-full bg-black text-white hover:bg-white hover:text-black"
+                href={"/api/auth/signout"}
+              >
+                {" "}
+                Sign Out{" "}
+              </Link>
+            )}
           </div>
         ) : (
           <div className="flex items-center justify-center gap-7">

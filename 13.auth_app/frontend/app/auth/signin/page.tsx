@@ -50,6 +50,12 @@ const page = () => {
           Sign In
         </button>
         <p>or</p>
+        <Link
+          className="px-4 py-2 ring-1 ring-black rounded-full w-[280px] bg-white text-black hover:bg-black hover:text-white"
+          href="/api/auth/signin"
+        >
+          Sign In With Google
+        </Link>
         <Link href={"/auth/signup"}>
           Don't have a account,{" "}
           <span className="border-b-2 border-b-black">Sign Up</span>
