@@ -5,11 +5,15 @@ import Connection from "../db/connection.js";
 import { Posts, User } from "../db/schema.js";
 import AuthMiddleware from "./middleware.js";
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
+import { decode } from "next-auth/jwt";
 
 const app = express();
+app.use(cookieParser());
 app.use(
   cors({
-    origin: "*",
+    credentials: true,
+    origin: "http://localhost:3000",
   })
 );
 
@@ -151,6 +155,20 @@ app.get("/api/userPosts", AuthMiddleware, async (req, res) => {
   const owner_id = req._id;
   const getUserPosts = await Posts.find({ owner_id });
   res.json({ getUserPosts });
+});
+
+app.get("/getToken", async (req, res) => {
+  try {
+    const stoken = req.cookies["next-auth.session-token"];
+    const decoded = await decode({
+      token: stoken,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+    console.log(decoded);
+    return res.status(201).json({ decoded });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
 });
 
 app.listen(process.env.PORT, () => {

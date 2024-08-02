@@ -7,12 +7,14 @@ interface PostProps {
 }
 
 import Link from "next/link";
+import Image from "next/image";
 export const isSession = localStorage.getItem("token");
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 function Home() {
+  const [token, gettoken] = useState({ name: "", email: "", picture: "" });
   const { status, data } = useSession();
   const [posts, setPosts] = useState<PostProps[]>([]);
   useEffect(() => {
@@ -24,6 +26,11 @@ function Home() {
         },
       })
       .then((res) => setPosts(res.data.getPosts));
+  }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/getToken", { withCredentials: true })
+      .then((res) => gettoken(res.data.decoded));
   }, []);
   return (
     <main>
@@ -54,13 +61,15 @@ function Home() {
                 Log Out
               </button>
             ) : (
-              <Link
-                className="px-4 py-2 ring-1 ring-black rounded-full bg-black text-white hover:bg-white hover:text-black"
-                href={"/api/auth/signout"}
-              >
-                {" "}
-                Sign Out{" "}
-              </Link>
+              <div>
+                <Link
+                  className="px-4 py-2 ring-1 ring-black rounded-full bg-black text-white hover:bg-white hover:text-black"
+                  href={"/api/auth/signout"}
+                >
+                  {" "}
+                  Sign Out{" "}
+                </Link>
+              </div>
             )}
           </div>
         ) : (
@@ -92,7 +101,18 @@ function Home() {
           ))}
         </div>
       ) : (
-        <p>do login</p>
+        <div>
+          <p>do login</p>
+        </div>
+      )}
+      {status === "authenticated" ? (
+        <div>
+          <p>{token.name}</p>
+          <p>{token.email}</p>
+          <Image src={token.picture} height={30} width={30} alt="profile" />
+        </div>
+      ) : (
+        <></>
       )}
     </main>
   );
