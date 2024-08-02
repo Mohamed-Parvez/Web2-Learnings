@@ -16,6 +16,7 @@ const page = () => {
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/userPosts", {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
@@ -38,6 +39,7 @@ const page = () => {
               onClick={async () => {
                 await fetch("http://localhost:8080/api/deletePost", {
                   method: "DELETE",
+                  credentials: "include",
                   headers: {
                     "Content-Type": "application/json",
                     Authorization: localStorage.getItem("token") as string,

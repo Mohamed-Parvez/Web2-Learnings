@@ -34,6 +34,7 @@ const page = () => {
           onClick={async () => {
             await fetch("http://localhost:8080/api/createPost", {
               method: "POST",
+              credentials: "include",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: localStorage.getItem("token") as string,
