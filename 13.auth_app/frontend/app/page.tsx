@@ -7,30 +7,24 @@ interface PostProps {
 }
 
 import Link from "next/link";
-import Image from "next/image";
 export const isSession = localStorage.getItem("token");
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 function Home() {
-  const [token, gettoken] = useState({ name: "", email: "", picture: "" });
   const { status, data } = useSession();
   const [posts, setPosts] = useState<PostProps[]>([]);
   useEffect(() => {
     axios
       .get("http://localhost:8080/posts", {
+        withCredentials: true,
         headers: {
           Authorization: localStorage.getItem("token"),
           "Content-Type": "application/json",
         },
       })
       .then((res) => setPosts(res.data.getPosts));
-  }, []);
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/getToken", { withCredentials: true })
-      .then((res) => gettoken(res.data.decoded));
   }, []);
   return (
     <main>
@@ -88,7 +82,7 @@ function Home() {
         )}
       </nav>
       <p className="mt-6 mx-10 text-[18px]">All Posts</p>
-      {isSession ? (
+      {isSession || status === "authenticated" ? (
         <div>
           {posts.map((e) => (
             <div className="flex justify-center space-x-10 mt-6 w-[340px] mx-10 ring-1 ring-slate-400">
@@ -104,15 +98,6 @@ function Home() {
         <div>
           <p>do login</p>
         </div>
-      )}
-      {status === "authenticated" ? (
-        <div>
-          <p>{token.name}</p>
-          <p>{token.email}</p>
-          <Image src={token.picture} height={30} width={30} alt="profile" />
-        </div>
-      ) : (
-        <></>
       )}
     </main>
   );
